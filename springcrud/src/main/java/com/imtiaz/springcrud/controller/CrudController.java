@@ -41,20 +41,34 @@ public class CrudController {
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity<?> update(@RequestParam("message") String message)
+    public ResponseEntity<?> update(@RequestBody User user)
     {
-        System.out.println("update => " + message);
+        System.out.println("update => " + user.name);
+        String message;
+        try{
+            message = CrudService.updateUser(user);
+        } catch (IOException e){
+            message = "Some error occured!";
+            System.out.println(e);
+        }
         MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setMessage("User has been updated successfully.");
+        messageResponse.setMessage(message);
         return new ResponseEntity<Object>(messageResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete")
-    public ResponseEntity<?>  delete(@RequestParam("id") String id)
+    public ResponseEntity<?>  delete(@RequestParam("id") int id)
     {
         System.out.println("delete => " + id);
+        String message;
+        try{
+            message = CrudService.deleteUser(id);
+        } catch (IOException e){
+            message = "Some error occured!";
+            System.out.println(e);
+        }
         MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setMessage("User has been deleted successfully.");
+        messageResponse.setMessage(message);
         return new ResponseEntity<Object>(messageResponse, HttpStatus.OK);
     }
 
